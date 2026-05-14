@@ -6,7 +6,7 @@ import com.exam.examsystem.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+import java.util.Optional;
 @Service
 public class QuestionService {
 
@@ -22,5 +22,27 @@ public class QuestionService {
 
     public List<Question> getAll() {
         return repo.findAll();
+    }
+
+    public Question updateQuestion(Long id, Question updateQuestion) {
+        Optional<Question> optionaQuestion = repo.findById(id);
+        if (optionaQuestion.isPresent()) {
+            Question existingQuestion = optionaQuestion.get();
+
+            existingQuestion.setQuestionText(updateQuestion.getQuestionText());
+            existingQuestion.setOptionA(updateQuestion.getOptionA());
+            existingQuestion.setOptionB(updateQuestion.getOptionB());
+            existingQuestion.setOptionC(updateQuestion.getOptionC());
+            existingQuestion.setOptionD(updateQuestion.getOptionD());
+            existingQuestion.setCorrectAnswer(updateQuestion.getCorrectAnswer());
+
+            return repo.save(existingQuestion);
+        } else {
+            throw new RuntimeException("Question not found ");
+        }
+    }
+
+    public void deleteQuestion(Long id){
+        repo.deleteById(id);
     }
 }

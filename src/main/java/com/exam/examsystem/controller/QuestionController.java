@@ -29,4 +29,15 @@ public class QuestionController {
 
         return service.getAll();
     }
-}
+
+    @PutMapping("/{id}")
+    public Question update(@PathVariable Long id,@RequestBody Question updateQuestion){
+        return service.updateQuestion(id,updateQuestion);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(@PathVariable Long id){
+        service.deleteQuestion(id);
+        return "Question was deleted Successfully";
+    }
+    }
