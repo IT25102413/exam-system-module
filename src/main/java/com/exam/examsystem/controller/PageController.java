@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import java.util.List;
 
 @Controller
 public class PageController {
@@ -19,9 +21,17 @@ public class PageController {
     public String addQuestionPage(){
         return "add-question";
     }
+
     @PostMapping("/questions/save")
     public String saveQuestion(@ModelAttribute Question q){
         service.addQuestion(q);
         return "redirect:/add-question";
+    }
+
+    @GetMapping("/view-questions")
+    public String viewQuestions(Model model){
+        List<Question>questions=service.getAll();
+        model.addAttribute("questions",questions);
+        return "view-questions";
     }
 }

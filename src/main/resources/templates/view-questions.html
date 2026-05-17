@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>View Questions</title>
+    <STYLE>
+        body{
+            font-family: "Arial Black";
+            background-color: aliceblue;
+            padding: 30px;
+        }
+        .container{
+            width: 90%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th,td{
+            border: 1px gray;
+            padding: 10px;
+            text-align: center;
+        }
+        th{
+            background-color: aqua;
+            color: white;
+        }
+    </STYLE>
+</head>
+<body>
+<div class="container" >
+    <h2>All Questions</h2>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Question</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Option C</th>
+            <th>Option D</th>
+            <th>Correct Answer</th>
+        </tr>
+
+        <tr th:each="q : ${questions}">
+            <td th:text="${q.id}"></td>
+            <td th:text="${q.questionText}"></td>
+            <td th:text="${q.optionA}"></td>
+            <td th:text="${q.optionB}"></td>
+            <td th:text="${q.optionC}"></td>
+            <td th:text="${q.optionD}"></td>
+            <td th:text="${q.correctAnswer}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
