@@ -45,4 +45,8 @@ public class QuestionService {
     public void deleteQuestion(Long id){
         repo.deleteById(id);
     }
+
+    public Question getById(Long id){
+        return repo.findById(id).orElse(null);
+    }
 }

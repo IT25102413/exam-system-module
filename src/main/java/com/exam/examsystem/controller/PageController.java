@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PageController {
@@ -33,5 +34,27 @@ public class PageController {
         List<Question>questions=service.getAll();
         model.addAttribute("questions",questions);
         return "view-questions";
+    }
+
+    @GetMapping("/delete-question/{id}")
+    public String deleteQuestion(@PathVariable long id){
+        service.deleteQuestion(id);
+        return "redirect:/view-questions";
+    }
+
+    @GetMapping("/edit-question/{id}")
+    public String editQuestion(@PathVariable long id,Model model){
+        Question question=service.getById(id);
+        if (question==null){
+            return "redirect:/view-questions";
+        }
+        model.addAttribute("question",question);
+        return "edit-question";
+    }
+
+    @PostMapping("/update-question/{id}")
+    public String updateQuestion (@PathVariable long id,@ModelAttribute Question question){
+        service.updateQuestion(id,question);
+        return "redirect:/view-questions";
     }
 }
