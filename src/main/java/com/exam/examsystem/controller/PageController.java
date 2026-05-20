@@ -9,17 +9,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.exam.examsystem.model.Exam;
+import com.exam.examsystem.service.ExamService;
 
 @Controller
 public class PageController {
     private final QuestionService service;
+    private final ExamService examService;
 
-    public PageController(QuestionService service){
+    public PageController(QuestionService service,ExamService examService){
         this.service=service;
+        this.examService=examService;
     }
 
     @GetMapping("/add-question")
-    public String addQuestionPage(){
+    public String addQuestionPage(Model model) {
+        List<Exam>exams=examService.getAll();
+        model.addAttribute("exams",exams);
         return "add-question";
     }
 
@@ -57,4 +63,15 @@ public class PageController {
         service.updateQuestion(id,question);
         return "redirect:/view-questions";
     }
+
+    @GetMapping("/select-exam")
+        public String selectExam(){
+        return "select-exam";
+    }
+    @PostMapping("/save-exam")
+    public String saveExam (@ModelAttribute Exam exam){
+        Exam savedExam=examService.saveExam(exam);
+        return "redirect:/add-question?examId=" + savedExam.getId();
+    }
+
 }

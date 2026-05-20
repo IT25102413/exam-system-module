@@ -17,7 +17,7 @@ public class ExamController {
     @PostMapping
     public Exam create (@RequestBody Exam exam){
 
-        return service.createexam(exam);
+        return service.saveExam(exam);
     }
     @GetMapping
     public List<Exam> getAll(){

@@ -35,9 +35,22 @@
 <div class="container">
     <h2>Add Question</h2>
     <form action="/questions/save" method="post">
+        <select name="exam">
+            <option value="">Select Exam</option>
+            <option th:each="e:${exams}"
+                    th:value="${e.id}"
+                    th:text="${e.examName}">
+            </option>
+        </select>
+        <select name="questionType" id="questionType">
+            <option value="">Select Question Type</option>
+            <option value="MCQ">MCQ</option>
+            <option value="Short_Answer">Short Answer</option>
+        </select>
         <input type="text"
         name="questionText"
         placeholder="Enter Question">
+        <div id="mcqFields">
         <input type="text"
         name="optionA"
         placeholder="Option A">
@@ -49,7 +62,7 @@
                placeholder="Option C">
         <input type="text"
                name="optionD"
-               placeholder="Option D">
+               placeholder="Option D"></div>
         <input type="text"
                name="correctAnswer"
                placeholder="Correct Answer">
@@ -58,5 +71,16 @@
         </button>
     </form>
 </div>
+<script>
+    const questionType=document.getElementById("questionType");
+    const mcqFields= document.getElementById("mcqFields");
+    questionType.addEventListener("change",function (){
+        if(this.value=="Short_Answer"){
+            mcqFields.style.display="none";
+        }else {
+            mcqFields.style.display="block";
+        }
+    });
+</script>
 </body>
 </html>
