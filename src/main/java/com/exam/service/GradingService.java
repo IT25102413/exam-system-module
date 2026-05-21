@@ -35,4 +35,5 @@ public class GradingService {
         String comment = generateComment(grade);
         return new ExamResult(studentId, examName, score, grade, comment);
     }
+
 }
