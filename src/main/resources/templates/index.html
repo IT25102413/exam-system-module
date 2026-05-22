@@ -41,12 +41,15 @@
         .announce-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
         .target-chip{font-size:11px;color:var(--text2);background:var(--surface2);border:0.5px solid var(--border);border-radius:20px;padding:2px 8px}
         .announce-content{font-size:13px;color:var(--text2);line-height:1.6;margin-top:8px}
-        .announce-actions{display:flex;gap:8px;margin-top:14px}
-        .btn-sm{padding:6px 12px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s}
+        .announce-actions,.fb-actions{display:flex;gap:8px;margin-top:14px}
+        .btn-sm{padding:6px 12px;border-radius:8px;border:0.5px solid var(--border);background:var(--surface2);color:var(--text2);font-size:12px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:4px}
         .btn-sm:hover{background:var(--surface3);color:var(--text1)}
-        .btn-primary{background:var(--purple);border-color:var(--purple);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:none;width:100%}
+        .btn-sm.btn-danger-hover:hover{background:rgba(248,113,113,0.15);color:var(--red);border-color:rgba(248,113,113,0.3)}
+        .btn-primary{background:var(--purple);border-color:var(--purple);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;border:none;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px}
         .btn-primary:hover{background:#9080f5;transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,108,240,0.4)}
         .btn-primary:active{transform:translateY(0)}
+        .btn-secondary{background:var(--surface3);border:0.5px solid var(--border);color:var(--text2);padding:10px 20px;border-radius:10px;font-size:13px;cursor:pointer;transition:all .2s;width:100%;text-align:center;margin-top:8px}
+        .btn-secondary:hover{color:var(--text1);background:rgba(255,255,255,0.08)}
         .form-section{background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:24px;position:relative;overflow:hidden}
         .form-section::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.04) 0%,transparent 60%);pointer-events:none}
         .form-shine{position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent)}
@@ -64,8 +67,8 @@
         .star:hover{transform:scale(1.15)}
         .divider{height:0.5px;background:var(--border);margin:20px 0}
         .feedback-cards{display:grid;gap:12px;margin-top:20px}
-        .fb-card{background:var(--surface2);border:0.5px solid var(--border);border-radius:12px;padding:16px;position:relative;overflow:hidden;transition:box-shadow .2s}
-        .fb-card:hover{box-shadow:0 6px 20px rgba(0,0,0,0.3)}
+        .fb-card{background:var(--surface);border:0.5px solid var(--border);border-radius:16px;padding:20px;position:relative;overflow:hidden;transition:transform .25s,box-shadow .25s}
+        .fb-card:hover{transform:perspective(800px) rotateX(1deg) translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,0.4)}
         .fb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
         .fb-name{font-size:13px;font-weight:500;color:var(--text1);display:flex;align-items:center;gap:8px}
         .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:#fff}
@@ -110,15 +113,15 @@
         <div class="section-title"><i class="ti ti-list" aria-hidden="true"></i> Active Announcements</div>
         <div id="ann-list"></div>
         <div class="divider"></div>
-        <div class="form-section">
+        <div class="form-section" id="ann-form-sec">
             <div class="form-shine"></div>
-            <div class="form-title"><i class="ti ti-plus" aria-hidden="true" style="color:var(--purple2)"></i> New Announcement</div>
+            <div class="form-title" id="ann-form-title"><i class="ti ti-plus" aria-hidden="true" style="color:var(--purple2)"></i> New Announcement</div>
             <div class="form-grid">
                 <div class="form-group full"><label class="form-label">Title</label><input class="form-input" id="a-title" placeholder="Announcement title..." /></div>
                 <div class="form-group"><label class="form-label">Priority</label>
                     <select class="form-select" id="a-priority">
                         <option value="High">🔴 High</option>
-                        <option value="Normal" th:selected="true">¼ Normal</option>
+                        <option value="Normal" selected>🔵 Normal</option>
                         <option value="Low">🟢 Low</option>
                     </select>
                 </div>
@@ -131,14 +134,15 @@
                 </div>
                 <div class="form-group full"><label class="form-label">Content</label><textarea class="form-textarea" id="a-content" rows="3" placeholder="Write your announcement..."></textarea></div>
             </div>
-            <button class="btn-primary" onclick="postAnnouncement()"><i class="ti ti-send" aria-hidden="true"></i> Post Announcement</button>
+            <button class="btn-primary" id="btn-submit-ann" onclick="postAnnouncement()"><i class="ti ti-send" aria-hidden="true"></i> Post Announcement</button>
+            <button class="btn-secondary" id="btn-cancel-ann" style="display:none" onclick="clearAnnForm()">Cancel Edit</button>
         </div>
     </div>
 
     <div id="sec-feedback" class="section">
-        <div class="form-section" style="margin-bottom:20px">
+        <div class="form-section" id="fb-form-sec" style="margin-bottom:20px">
             <div class="form-shine"></div>
-            <div class="form-title"><i class="ti ti-star" aria-hidden="true" style="color:var(--amber)"></i> Submit Feedback</div>
+            <div class="form-title" id="fb-form-title"><i class="ti ti-star" aria-hidden="true" style="color:var(--amber)"></i> Submit Feedback</div>
             <div class="form-grid">
                 <div class="form-group full"><label class="form-label">Your Name</label><input class="form-input" id="f-name" placeholder="Student name..." /></div>
                 <div class="form-group full">
@@ -153,7 +157,8 @@
                 </div>
                 <div class="form-group full"><label class="form-label">Message</label><textarea class="form-textarea" id="f-msg" rows="3" placeholder="Share your experience..."></textarea></div>
             </div>
-            <button class="btn-primary" onclick="submitFeedback()"><i class="ti ti-send" aria-hidden="true"></i> Submit Feedback</button>
+            <button class="btn-primary" id="btn-submit-fb" onclick="submitFeedback()"><i class="ti ti-send" aria-hidden="true"></i> Submit Feedback</button>
+            <button class="btn-secondary" id="btn-cancel-fb" style="display:none" onclick="clearFbForm()">Cancel Edit</button>
         </div>
         <div class="section-title"><i class="ti ti-messages" aria-hidden="true"></i> Recent Feedback</div>
         <div class="feedback-cards" id="fb-list"></div>
@@ -167,6 +172,10 @@
     let annData = [];
     let fbData = [];
     let selectedRating = 0;
+
+    // Tracking variables for item updates
+    let editingAnnId = null;
+    let editingFbId = null;
 
     function switchTab(t, event) {
       document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
@@ -204,6 +213,7 @@
       document.getElementById('s-high').textContent = annData.filter(a => a.priority === 'High').length;
       document.getElementById('s-target').textContent = annData.length ? annData[annData.length-1].target : '—';
       if (!annData.length) { list.innerHTML = '<div class="empty-state">No announcements yet. Post the first one below.</div>'; return; }
+
       list.innerHTML = annData.slice().reverse().map(a => `
         <div class="card-3d">
           <div class="card-shine"></div>
@@ -215,7 +225,8 @@
           </div>
           <div class="announce-content">${a.content}</div>
           <div class="announce-actions">
-            <button class="btn-sm" onclick="deleteAnnouncement(${a.id})"><i class="ti ti-trash" style="font-size:12px"></i> Delete</button>
+            <button class="btn-sm" onclick="startEditAnnouncement(${a.id})"><i class="ti ti-edit" style="font-size:12px"></i> Edit</button>
+            <button class="btn-sm btn-danger-hover" onclick="deleteAnnouncement(${a.id})"><i class="ti ti-trash" style="font-size:12px"></i> Delete</button>
           </div>
         </div>`).join('');
     }
@@ -224,6 +235,7 @@
       const list = document.getElementById('fb-list');
       document.getElementById('fb-count').textContent = fbData.length;
       if (!fbData.length) { list.innerHTML = '<div class="empty-state">No feedback yet.</div>'; return; }
+
       list.innerHTML = fbData.slice().reverse().map(f => `
         <div class="fb-card">
           <div class="fb-header">
@@ -231,6 +243,10 @@
             <div class="fb-stars">${'★'.repeat(f.rating || 0)}${'☆'.repeat(5 - (f.rating || 0))}</div>
           </div>
           <div class="fb-msg">${f.message || ''}</div>
+          <div class="fb-actions">
+            <button class="btn-sm" onclick="startEditFeedback(${f.id})"><i class="ti ti-edit" style="font-size:12px"></i> Edit</button>
+            <button class="btn-sm btn-danger-hover" onclick="deleteFeedback(${f.id})"><i class="ti ti-trash" style="font-size:12px"></i> Delete</button>
+          </div>
         </div>`).join('');
     }
 
@@ -250,37 +266,115 @@
       } catch (e) { fbData = []; renderFeedback(); }
     }
 
+    // --- ANNOUNCEMENT ACTIONS ---
+
+    function startEditAnnouncement(id) {
+      const item = annData.find(a => a.id === id);
+      if (!item) return;
+      editingAnnId = id;
+
+      document.getElementById('a-title').value = item.title;
+      document.getElementById('a-content').value = item.content;
+      document.getElementById('a-priority').value = item.priority;
+      document.getElementById('a-target').value = item.target;
+
+      document.getElementById('ann-form-title').innerHTML = `<i class="ti ti-edit" style="color:var(--amber)"></i> Edit Announcement (#${id})`;
+      document.getElementById('btn-submit-ann').innerHTML = `<i class="ti ti-check"></i> Update Announcement`;
+      document.getElementById('btn-cancel-ann').style.display = 'block';
+
+      document.getElementById('ann-form-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function clearAnnForm() {
+      editingAnnId = null;
+      document.getElementById('a-title').value = '';
+      document.getElementById('a-content').value = '';
+      document.getElementById('a-priority').value = 'Normal';
+      document.getElementById('a-target').value = 'All';
+
+      document.getElementById('ann-form-title').innerHTML = `<i class="ti ti-plus" style="color:var(--purple2)"></i> New Announcement`;
+      document.getElementById('btn-submit-ann').innerHTML = `<i class="ti ti-send"></i> Post Announcement`;
+      document.getElementById('btn-cancel-ann').style.display = 'none';
+    }
+
     async function postAnnouncement() {
       const title = document.getElementById('a-title').value.trim();
       const content = document.getElementById('a-content').value.trim();
       const priority = document.getElementById('a-priority').value;
       const target = document.getElementById('a-target').value;
       if (!title || !content) { toast('Please fill in title and content', false); return; }
+
+      const payload = { title, content, priority, target };
+
       try {
-        const r = await fetch(BASE + '/announcements', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({title, content, priority, target})
-        });
-        const saved = await r.json();
-        annData.push(saved);
-        document.getElementById('a-title').value = '';
-        document.getElementById('a-content').value = '';
+        if (editingAnnId !== null) {
+          // PUT request for Updates
+          const r = await fetch(`${BASE}/announcements/${editingAnnId}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const updated = await r.json();
+          annData = annData.map(a => a.id === editingAnnId ? updated : a);
+          toast('Announcement updated cleanly!');
+          clearAnnForm();
+        } else {
+          // POST request for Create
+          const r = await fetch(BASE + '/announcements', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const saved = await r.json();
+          annData.push(saved);
+          clearAnnForm();
+          toast('Announcement posted!');
+        }
         renderAnnouncements();
-        toast('Announcement posted!');
       } catch (e) {
-        toast('Error connection failed', false);
+        toast('Server connection failed', false);
       }
     }
 
     async function deleteAnnouncement(id) {
+      if(!confirm("Delete this announcement permanently?")) return;
       try {
         await fetch(BASE + '/announcements/' + id, { method: 'DELETE' });
         annData = annData.filter(a => a.id !== id);
+        if (editingAnnId === id) clearAnnForm();
         renderAnnouncements();
         toast('Announcement removed');
       } catch (e) {
         toast('Error removing item', false);
       }
+    }
+
+    // --- FEEDBACK ACTIONS ---
+
+    function startEditFeedback(id) {
+      const item = fbData.find(f => f.id === id);
+      if (!item) return;
+      editingFbId = id;
+
+      document.getElementById('f-name').value = item.studentName;
+      document.getElementById('f-msg').value = item.message;
+      setRating(item.rating || 0);
+
+      document.getElementById('fb-form-title').innerHTML = `<i class="ti ti-edit" style="color:var(--amber)"></i> Edit Feedback (#${id})`;
+      document.getElementById('btn-submit-fb').innerHTML = `<i class="ti ti-check"></i> Update Feedback`;
+      document.getElementById('btn-cancel-fb').style.display = 'block';
+
+      document.getElementById('fb-form-sec').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function clearFbForm() {
+      editingFbId = null;
+      document.getElementById('f-name').value = '';
+      document.getElementById('f-msg').value = '';
+      selectedRating = 0;
+      document.querySelectorAll('#star-rating .star').forEach(s => s.classList.remove('active'));
+
+      document.getElementById('fb-form-title').innerHTML = `<i class="ti ti-star" style="color:var(--amber)"></i> Submit Feedback`;
+      document.getElementById('btn-submit-fb').innerHTML = `<i class="ti ti-send"></i> Submit Feedback`;
+      document.getElementById('btn-cancel-fb').style.display = 'none';
     }
 
     async function submitFeedback() {
@@ -289,21 +383,47 @@
       const rating = selectedRating;
       if (!studentName || !message) { toast('Please fill in name and message', false); return; }
       if (!rating) { toast('Please select a rating', false); return; }
+
+      const payload = { studentName, message, rating };
+
       try {
-        const r = await fetch(BASE + '/feedback', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({studentName, message, rating})
-        });
-        const saved = await r.json();
-        fbData.push(saved);
-        document.getElementById('f-name').value = '';
-        document.getElementById('f-msg').value = '';
-        selectedRating = 0;
-        document.querySelectorAll('#star-rating .star').forEach(s => s.classList.remove('active'));
+        if (editingFbId !== null) {
+          // PUT request for Updates
+          const r = await fetch(`${BASE}/feedback/${editingFbId}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const updated = await r.json();
+          fbData = fbData.map(f => f.id === editingFbId ? updated : f);
+          toast('Feedback updated successfully!');
+          clearFbForm();
+        } else {
+          // POST request for Create
+          const r = await fetch(BASE + '/feedback', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const saved = await r.json();
+          fbData.push(saved);
+          clearFbForm();
+          toast('Feedback submitted!');
+        }
         renderFeedback();
-        toast('Feedback submitted!');
       } catch (e) {
         toast('Error submitting data', false);
+      }
+    }
+
+    async function deleteFeedback(id) {
+      if(!confirm("Delete this feedback permanently?")) return;
+      try {
+        await fetch(BASE + '/feedback/' + id, { method: 'DELETE' });
+        fbData = fbData.filter(f => f.id !== id);
+        if (editingFbId === id) clearFbForm();
+        renderFeedback();
+        toast('Feedback removed');
+      } catch (e) {
+        toast('Error removing item', false);
       }
     }
 

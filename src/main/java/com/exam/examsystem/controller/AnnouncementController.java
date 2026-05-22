@@ -16,19 +16,34 @@ public class AnnouncementController {
     @Autowired
     private AnnouncementRepository announcementRepository;
 
-    // 1. GET all announcements (frontend: fetch(BASE + '/announcements'))
+    // 1. GET all announcements (Read)
     @GetMapping
     public List<Announcement> getAllAnnouncements() {
         return announcementRepository.findAll();
     }
 
-    // 2. POST a new announcement (frontend: method:'POST', body: JSON)
+    // 2. POST a new announcement (Create)
     @PostMapping
     public Announcement createAnnouncement(@RequestBody Announcement announcement) {
         return announcementRepository.save(announcement);
     }
 
-    // 3. DELETE an announcement by ID (frontend: deleteAnnouncement(id))
+    // 3. PUT (Update) an existing announcement by ID
+    @PutMapping("/{id}")
+    public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Long id, @RequestBody Announcement updatedData) {
+        return announcementRepository.findById(id)
+                .map(announcement -> {
+                    announcement.setTitle(updatedData.getTitle());
+                    announcement.setContent(updatedData.getContent());
+                    announcement.setPriority(updatedData.getPriority());
+                    announcement.setTarget(updatedData.getTarget());
+                    Announcement savedAnnouncement = announcementRepository.save(announcement);
+                    return ResponseEntity.ok(savedAnnouncement);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // 4. DELETE an announcement by ID (Delete)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteAnnouncement(@PathVariable Long id) {
         return announcementRepository.findById(id)
