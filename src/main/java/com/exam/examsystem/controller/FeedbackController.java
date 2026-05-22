@@ -15,11 +15,13 @@ public class FeedbackController {
     @Autowired
     private FeedbackRepository feedbackRepository;
 
+    // 1. GET all student feedback (frontend: fetch(BASE + '/feedback'))
     @GetMapping
     public List<Feedback> getAllFeedback() {
         return feedbackRepository.findAll();
     }
 
+    // 2. POST student feedback submission
     @PostMapping
     public Feedback submitFeedback(@RequestBody Feedback feedback) {
         return feedbackRepository.save(feedback);
