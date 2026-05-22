@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Add Question</title>
+    <style>
+        body{
+            font-family: "Arial Black";
+            background-color: aliceblue;
+            padding: 30px;
+        }
+        .container{
+            width: 500px;
+            margin: auto;
+            background: aliceblue;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        input{
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button{
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: aqua;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Add Question</h2>
+    <form action="/questions/save" method="post">
+        <select name="exam">
+            <option value="">Select Exam</option>
+            <option th:each="e:${exams}"
+                    th:value="${e.id}"
+                    th:text="${e.examName}">
+            </option>
+        </select>
+        <select name="questionType" id="questionType">
+            <option value="">Select Question Type</option>
+            <option value="MCQ">MCQ</option>
+            <option value="Short_Answer">Short Answer</option>
+        </select>
+        <input type="text"
+               name="questionText"
+               placeholder="Enter Question">
+        <div id="mcqFields">
+            <input type="text"
+                   name="optionA"
+                   placeholder="Option A">
+            <input type="text"
+                   name="optionB"
+                   placeholder="Option B">
+            <input type="text"
+                   name="optionC"
+                   placeholder="Option C">
+            <input type="text"
+                   name="optionD"
+                   placeholder="Option D"></div>
+        <input type="text"
+               name="correctAnswer"
+               placeholder="Correct Answer">
+        <button type="submit">
+            Save Question
+        </button>
+    </form>
+</div>
+<script>
+    const questionType=document.getElementById("questionType");
+    const mcqFields= document.getElementById("mcqFields");
+    questionType.addEventListener("change",function (){
+        if(this.value=="Short_Answer"){
+            mcqFields.style.display="none";
+        }else {
+            mcqFields.style.display="block";
+        }
+    });
+</script>
+</body>
+</html>
