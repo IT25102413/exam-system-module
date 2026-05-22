@@ -10,7 +10,6 @@ public class ExamService {
     private final ExamRepository repo;
 
     public ExamService(ExamRepository repo){
-
         this.repo=repo;
     }
     public Exam createexam(Exam exam){
@@ -20,5 +19,9 @@ public class ExamService {
     public List <Exam> getAll(){
 
         return repo.findAll();
+    }
+
+    public  Exam saveExam(Exam exam){
+        return repo.save(exam);
     }
 }

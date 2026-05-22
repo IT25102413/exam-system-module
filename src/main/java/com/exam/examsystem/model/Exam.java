@@ -6,8 +6,8 @@ public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String exam_name;
-    private int duration;
+    private String examName;
+
 
     public Exam(){}
 
@@ -15,23 +15,17 @@ public class Exam {
         return id;
     }
 
-    public String getExam_name() {
-        return exam_name;
+    public String getExamName() {
+        return examName;
     }
 
-    public int getDuration() {
-        return duration;
-    }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public void setExam_name(String exam_name) {
-        this.exam_name = exam_name;
+    public void setExamName(String examName) {
+        this.examName = examName;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
 }

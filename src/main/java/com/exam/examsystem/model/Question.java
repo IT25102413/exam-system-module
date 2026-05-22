@@ -15,6 +15,7 @@ public class Question {
     private String optionC;
     private String optionD;
     private String correctAnswer;
+    private String questionType;
 
     @ManyToOne
     @JoinColumn(name = "exam_id")
@@ -76,5 +77,21 @@ public class Question {
 
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getQuestionType(){
+        return  questionType;
+    }
+
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
+    }
+
+    public Exam getExam() {
+        return exam;
+    }
+
+    public void setExam(Exam exam) {
+        this.exam = exam;
     }
 }
