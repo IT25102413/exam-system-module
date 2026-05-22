@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Select Exam</title>
+
+    <style>
+        body{
+            font-family: "Arial Black";
+            background-color: aliceblue;
+            padding: 30px;
+        }
+        .container{
+            width: 500px;
+            margin: auto;
+            background-color: white;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        input{
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button{
+            width: 100%;
+            padding: 10px;
+            margin: 15px;
+            background-color: aqua;
+            color: white;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Select Exam</h2>
+    <form action="/save-exam" method="post">
+        <input type="text"
+        name="examName"
+        placeholder="Enter Exam Name">
+        <button type="submit">Continue</button>
+    </form>
+</div>
+</body>
+</html>
